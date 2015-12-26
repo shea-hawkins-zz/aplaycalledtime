@@ -59,6 +59,7 @@
     "babel-register": "^6.3.13",
     "express-graphql": "^0.4.4",
     "graphql": "^0.4.13",
+    "graphql-relay": "^0.3.6",
     "koa": "^1.1.2",
     "koa-graphql": "^0.4.4",
     "koa-mount": "^1.3.0",
