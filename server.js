@@ -18,20 +18,21 @@
 
 
 var http = require('http');
+var express = require('express');
 
-//Lets define a port we want to listen to
-const PORT = process.env.PORT || 3000;
+var app = express();
+var port = process.env.PORT || 3000;
 
 //We need a function which handles requests and send response
-function handleRequest(request, response){
-    response.end('It Works!! Path Hit: ' + request.url);
-}
-
-//Create a server
-var server = http.createServer(handleRequest);
+// function handleRequest(request, response){
+//     response.end('It Works!! Path Hit: ' + request.url);
+// }
+app.get('*', function(req, res) {
+  res.end('It Works!! Path Hit: ' + req.url);
+});
 
 //Lets start our server
-server.listen(PORT, function(){
+app.listen(port, 'localhost', function(){
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", PORT);
+    console.log("Server listening on: http://localhost:%s", port);
 });
