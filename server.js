@@ -22,6 +22,7 @@ var express = require('express');
 
 var app = express();
 var port = process.env.PORT || 3000;
+var server = process.env.HOST || 'localhost';
 
 //We need a function which handles requests and send response
 // function handleRequest(request, response){
@@ -32,7 +33,7 @@ app.get('*', function(req, res) {
 });
 
 //Lets start our server
-app.listen(port, 'localhost', function(){
+app.listen(port, server, function(){
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", port);
+    console.log("Server listening on:" + server + ":" + port);
 });
