@@ -15,12 +15,18 @@
 //   }
 //   console.log('Listening at ' + port);
 // });
-
-
+require("babel-register")({
+  presets: ['es2015']
+});
 var koa = require('koa');
 var send = require('koa-send');
 var serve = require('koa-static');
 var route = require('koa-route');
+var graphqlHTTP = require('koa-graphql');
+var mount = require('koa-mount');
+
+var schema = require('./data/schema');
+
 var app = koa();
 
 var port = process.env.PORT || 3000;
@@ -31,16 +37,12 @@ app.use(function * (next) {
   console.log("Response sending for " + this.request.path);
 });
 
-//To Be graphql middleware
-app.use(function * (next) {
-  if (this.request.path === '/graphql') {
-      this.body = 'graphql';
-  } else {
-      yield * next;
-  }
-});
+//graphql middleware
+app.use(
+  mount('/graphql', graphqlHTTP({ schema: schema, graphiql: true }))
+);
 
-//To Be application middleware
+//application middleware
 app.use(
   route.get('/static*', function * () {
     console.log("here");

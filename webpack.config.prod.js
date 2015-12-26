@@ -1,13 +1,22 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var babelConfig = {
+  stage: 0,
+  env: {
+    development: {
+      plugins: ['./build/babelRelayPlugin'],
+    }
+  }
+};
+
 module.exports = {
   devtool: 'source-map',
   entry: [
     './src/index'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'static'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
@@ -27,8 +36,9 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['babel'],
-      include: path.join(__dirname, 'src')
+      loader: 'babel',
+      include: [path.join(__dirname, 'src'), path.join(__dirname, 'data')],
+      query: babelConfig
     }]
   }
 };

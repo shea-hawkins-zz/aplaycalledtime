@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "update-schema": "babel-node --presets es2015 ./data/updateSchema.js",
-    "build:webpack": "NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build:webpack": "SET NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run clean && npm run build:webpack",
     "start": "node server.js",
     "start-dev": "babel-node --presets es2015 devServer.js",
@@ -55,9 +55,12 @@
   },
   "dependencies": {
     "@risingstack/graffiti": "^2.0.0",
+    "babel-register": "^6.3.13",
     "express-graphql": "^0.4.4",
     "graphql": "^0.4.13",
     "koa": "^1.1.2",
+    "koa-graphql": "^0.4.4",
+    "koa-mount": "^1.3.0",
     "koa-route": "^2.4.2",
     "koa-static": "^1.5.2",
     "path": "^0.12.7",
