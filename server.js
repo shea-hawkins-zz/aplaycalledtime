@@ -18,19 +18,42 @@
 
 
 var koa = require('koa');
+var send = require('koa-send');
+var serve = require('koa-static');
+var route = require('koa-route');
 var app = koa();
 
 var port = process.env.PORT || 3000;
 
 app.use(function * (next) {
-  console.log("Request recieved");
+  console.log("Request recieved to " + this.request.url);
   yield * next;
-  console.log("Response sending");
+  console.log("Response sending for " + this.request.path);
 });
 
+//To Be graphql middleware
 app.use(function * (next) {
-  this.body = 'Hello World';
-  yield * next;
+  if (this.request.path === '/graphql') {
+      this.body = 'graphql';
+  } else {
+      yield * next;
+  }
 });
+
+//To Be application middleware
+app.use(
+  route.get('/static*', function * () {
+    console.log("here");
+    yield send(this, this.path, { root: __dirname });
+  })
+);
+
+app.use(
+  route.get('*', function * () {
+    console.log("there" + this.request.url);
+    yield send(this, 'index.html');
+  })
+);
 
 app.listen(port);
+console.log("listening on " + port);

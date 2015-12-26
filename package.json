@@ -58,6 +58,8 @@
     "express-graphql": "^0.4.4",
     "graphql": "^0.4.13",
     "koa": "^1.1.2",
+    "koa-route": "^2.4.2",
+    "koa-static": "^1.5.2",
     "path": "^0.12.7",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
