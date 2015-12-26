@@ -10,7 +10,7 @@ app.get('/app', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/app*', function(req, res) {
+app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -19,5 +19,5 @@ app.listen(port, '127.0.0.1', function(err) {
     console.log(err);
     return;
   }
-  console.log('Listening at http://greatify.me:80');
+  console.log('Listening at ' + port);
 });
