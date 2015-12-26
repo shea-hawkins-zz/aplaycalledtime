@@ -1,6 +1,5 @@
 var path = require('path');
 var express = require('express');
-var path = require('path');
 
 app.use(express.static(__dirname + '/semantic'));
 

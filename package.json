@@ -7,7 +7,7 @@
     "update-schema": "babel-node --presets es2015 ./data/updateSchema.js",
     "build:webpack": "NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run clean && npm run build:webpack",
-	"start":"node server.js",
+    "start": "node server.js",
     "start-dev": "babel-node --presets es2015 devServer.js",
     "lint": "eslint src"
   },
@@ -56,8 +56,10 @@
   },
   "dependencies": {
     "@risingstack/graffiti": "^2.0.0",
+    "express": "^4.13.3",
     "express-graphql": "^0.4.4",
     "graphql": "^0.4.13",
+    "path": "^0.12.7",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-select": "^0.9.1"
