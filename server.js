@@ -17,23 +17,20 @@
 // });
 
 
-var http = require('http');
-var express = require('express');
+var koa = require('koa');
+var app = koa();
 
-var app = express();
 var port = process.env.PORT || 3000;
-var server = process.env.HOST || 'localhost';
 
-//We need a function which handles requests and send response
-// function handleRequest(request, response){
-//     response.end('It Works!! Path Hit: ' + request.url);
-// }
-app.get('*', function(req, res) {
-  res.end('It Works!! Path Hit: ' + req.url);
+app.use(function * (next) {
+  console.log("Request recieved");
+  yield * next;
+  console.log("Response sending");
 });
 
-//Lets start our server
-app.listen(port, server, function(){
-    //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on:" + server + ":" + port);
+app.use(function * (next) {
+  this.body = 'Hello World';
+  yield * next;
 });
+
+app.listen(port);
