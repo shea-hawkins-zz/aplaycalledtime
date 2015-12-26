@@ -13,7 +13,7 @@ app.get('/app*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(80, 'greatify.me', function(err) {
+app.listen(80, '127.0.0.1', function(err) {
   if (err) {
     console.log(err);
     return;
