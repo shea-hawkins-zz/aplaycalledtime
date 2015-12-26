@@ -1,0 +1,132 @@
+input AddDayInput {
+  date: String
+  monthId: ID!
+  clientMutationId: String!
+}
+
+type AddDayPayload {
+  month: Month
+  newDayEdge: Day
+  clientMutationId: String!
+}
+
+input AddStatBlockToParentInput {
+  statBlock: StatBlockInput!
+  parentId: ID!
+  clientMutationId: String!
+}
+
+type AddStatBlockToParentPayload {
+  parent: [StatBlockParentInterface]
+  clientMutationId: String!
+}
+
+input AddStatInput {
+  statBlockId: ID!
+  stat: StatInput!
+  clientMutationId: String!
+}
+
+type AddStatPayload {
+  stat: Stat
+  statBlock: StatBlock
+  clientMutationId: String!
+}
+
+type Day implements Node, StatBlockParentInterface {
+  id: ID!
+  date: String
+  statBlocks(after: String, first: Int, before: String, last: Int): StatBlockConnection!
+}
+
+type DayConnection {
+  pageInfo: PageInfo!
+  edges: [DayEdge]
+}
+
+type DayEdge {
+  node: Day
+  cursor: String!
+}
+
+type Month implements Node {
+  id: ID!
+  days(after: String, first: Int, before: String, last: Int): DayConnection
+}
+
+type Mutation {
+  addStat(input: AddStatInput!): AddStatPayload
+  addDay(input: AddDayInput!): AddDayPayload
+  addStatBlockToParent(input: AddStatBlockToParentInput!): AddStatBlockToParentPayload
+}
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Query {
+  stat(id: ID): Stat
+  statBlock(id: ID): StatBlock
+  statBlocks(after: String, first: Int, before: String, last: Int): StatBlockConnection
+  day(id: ID): Day
+  month(id: ID): Month
+  node(id: ID!): Node
+}
+
+type Stat implements Node {
+  id: ID!
+  name: String
+  type: String
+  value: String
+  conf: Int
+}
+
+type StatBlock implements Node {
+  id: ID!
+  type: String
+  prev: StatBlock
+  stats(after: String, first: Int, before: String, last: Int): StatConnection
+}
+
+type StatBlockConnection {
+  pageInfo: PageInfo!
+  edges: [StatBlockEdge]
+}
+
+type StatBlockEdge {
+  node: StatBlock
+  cursor: String!
+}
+
+input StatBlockInput {
+  type: String!
+}
+
+interface StatBlockParentInterface {
+  id: ID!
+  statBlocks(after: String, first: Int, before: String, last: Int): StatBlockConnection!
+}
+
+type StatConnection {
+  pageInfo: PageInfo!
+  edges: [StatEdge]
+}
+
+type StatEdge {
+  node: Stat
+  cursor: String!
+}
+
+input StatInput {
+  name: String!
+  type: String!
+  value: String!
+  conf: Int!
+}
