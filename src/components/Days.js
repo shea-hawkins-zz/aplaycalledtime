@@ -12,9 +12,9 @@ class Days extends React.Component {
   render() {
     return (<div>
               <button className="ui button" onClick={this._handleClick}>New Day</button>
-              <ul>
+              <ul className="ui list">
                 {this.props.month.days.edges.map(function(e){
-                  return <li><Link to={`/app/days/${e.node.id}`}>{`Day ${e.node.date}`}</Link></li>
+                  return <li className="ui list item"><Link to={`/days/${e.node.id}`}>{`Day ${e.node.date}`}</Link></li>
                 })}
               </ul>
             </div>);

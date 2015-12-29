@@ -1,35 +1,47 @@
-var path = require('path');
-var express = require('express');
+require("babel-register")({
+  presets: ['es2015']
+});
+var koa = require('koa');
+var send = require('koa-send');
+var serve = require('koa-static');
+var route = require('koa-route');
+var graphqlHTTP = require('koa-graphql');
+var mount = require('koa-mount');
 var webpack = require('webpack');
 var config = require('./webpack.config.dev');
-var graphqlHTTP = require('express-graphql');
-var schema = require('./data/schema.js');
-var app = express();
+
+var schema = require('./database/schema');
+
+var app = koa();
 var compiler = webpack(config);
 
-app.use(require('webpack-dev-middleware')(compiler, {
+var port = process.env.PORT || 3000;
+
+//Hot middleware
+app.use(require('koa-webpack-dev-middleware')(compiler, {
   noInfo: true,
   publicPath: config.output.publicPath
 }));
 
-app.use(require('webpack-hot-middleware')(compiler));
+app.use(require('koa-webpack-hot-middleware')(compiler));
 
-app.use(express.static(__dirname + '/semantic'));
+//graphql middleware
+app.use(
+  mount('/graphql', graphqlHTTP({ schema: schema, graphiql: true }))
+);
 
-app.get('/app', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+//application middleware
+app.use(
+  route.get('/dist*', function * () {
+    yield send(this, this.path, { root: __dirname });
+  })
+);
 
-app.get('/app*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.use(
+  route.get('*', function * () {
+    yield send(this, 'index.html');
+  })
+);
 
-app.use('/graphql', graphqlHTTP({schema: schema, pretty:true}));
-
-app.listen(3000, 'localhost', function(err) {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log('Listening at http://localhost:3000');
-});
+app.listen(port);
+console.log("listening on " + port);

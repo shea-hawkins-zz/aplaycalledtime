@@ -1,0 +1,6 @@
+/*******************************
+    User Variable Overrides
+********************************
+@backgroundColor: @black;
+@color             : #111122;
+@borderBoxShadow: 0px 0px 0px 20px @solidBorderColor inset;

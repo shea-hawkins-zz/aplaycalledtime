@@ -25,7 +25,7 @@ var route = require('koa-route');
 var graphqlHTTP = require('koa-graphql');
 var mount = require('koa-mount');
 
-var schema = require('./data/schema');
+var schema = require('./database/schema');
 
 var app = koa();
 
@@ -44,15 +44,13 @@ app.use(
 
 //application middleware
 app.use(
-  route.get('/static*', function * () {
-    console.log("here");
+  route.get('/dist*', function * () {
     yield send(this, this.path, { root: __dirname });
   })
 );
 
 app.use(
   route.get('*', function * () {
-    console.log("there" + this.request.url);
     yield send(this, 'index.html');
   })
 );

@@ -5,7 +5,7 @@ import StatInput from './StatInput';
 import StatBlockInput from './StatBlockInput';
 import { Link } from 'react-router';
 import AddStatBlockToDayMutation from '../mutations/AddStatBlockToDayMutation';
-import Intent from '../Intent';
+import Intent from '../state/Intent';
 
 class Day extends React.Component {
   newStatBlock = {};
@@ -27,7 +27,7 @@ class Day extends React.Component {
     Intent.toggleNew();
   };
   render() {
-    return (<div><Link to={`/app/month/`} className="ui button">All Days</Link>
+    return (<div><Link to={`/month/`} className="ui button">All Days</Link>
                   <StatBlockInput showNew={this.props.appState.showNew} handleChange={this.handleStatBlockChange.bind(this)} handleSubmit={this.handleStatBlockSubmit.bind(this)} handleToggle={this.handleToggle.bind(this)} />
                   {
                     this.props.day.statBlocks.edges.map(
