@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import Relay from 'react-relay';
 import { RelayRouter } from 'react-router-relay';
-import { Route, IndexRoute } from 'react-router';
+import { Route, IndexRoute, Link } from 'react-router';
 import Rx from 'rxjs';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import update from 'react-addons-update';
@@ -24,7 +24,11 @@ const monthQuery = {
 var App = function(props) {
   return (<div className="ui divider">
               <h1 className="ui header">A play called Time.</h1>
-              <h2 className="ui menu item">Introductory Chapter.</h2>
+              <div className="ui three item menu">
+                <Link to={`/month/`} className="item" activeClassName="active item">Stats</Link>
+                <Link to={`/month/`} className="item">Posts</Link>
+                <Link to={`/month/`} className="item">Drawings</Link>
+              </div>
             {props.children}
           </div>);
 };

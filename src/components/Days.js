@@ -14,7 +14,7 @@ class Days extends React.Component {
               <button className="ui button" onClick={this._handleClick}>New Day</button>
               <ul className="ui list">
                 {this.props.month.days.edges.map(function(e){
-                  return <li className="ui list item"><Link to={`/days/${e.node.id}`}>{`Day ${e.node.date}`}</Link></li>
+                  return <li className="item"><Link to={`/days/${e.node.id}`}>{`Day ${e.node.date}`}</Link></li>
                 })}
               </ul>
             </div>);
@@ -27,7 +27,7 @@ export default Relay.createContainer(Days, {
       fragment on Month {
           id,
           ${AddDayMutation.getFragment('month')},
-          days(first: 10) {
+          days(last: 10) {
             edges {
               node {
                 id,

@@ -16,7 +16,7 @@ var schema = require('./schema.js');
       );
     } else {
       fs.writeFileSync(
-        path.join(__dirname, '../data/schema.json'),
+        path.join(__dirname, '../database/schema.json'),
         JSON.stringify(result, null, 2)
       );
     }
@@ -25,6 +25,6 @@ var schema = require('./schema.js');
 
 // Save user readable type system shorthand of schema
 fs.writeFileSync(
-  path.join(__dirname, '../data/schema.graphql'),
+  path.join(__dirname, '../database/schema.graphql'),
   printSchema(schema)
 );

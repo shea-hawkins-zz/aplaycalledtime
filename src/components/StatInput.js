@@ -3,7 +3,6 @@ import Relay from 'react-relay';
 import AddStatMutation from '../mutations/AddStatMutation';
 
 class StatInput extends Component {
-  exercises = ['Bench', 'Pullup', 'Squat', 'Deadlift'];
   newStat = {
                       type: "lift"
                     };
@@ -28,8 +27,8 @@ class StatInput extends Component {
   }
   render() {
     return (<div> <select id="name" className="ui dropdown" onChange={this._handleChange}>{
-                    this.exercises.map(function(e){
-                      return (<option value={e}>{e}</option>);
+                    this.props.statBlock.statTypes.map(function(e){
+                      return (<option value={e.type}>{e.type}</option>);
                     })
                   }</select>
                   <input className = "ui input" id="value" onChange={this._handleChange}></input>
@@ -51,7 +50,10 @@ export default Relay.createContainer(StatInput, {
   fragments: {
     statBlock: () => Relay.QL`
       fragment on StatBlock {
-        ${AddStatMutation.getFragment('statBlock')}
+        ${AddStatMutation.getFragment('statBlock')},
+        statTypes {
+          type
+        }
       }
     `
   }

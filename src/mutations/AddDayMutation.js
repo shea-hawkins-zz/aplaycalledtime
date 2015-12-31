@@ -31,5 +31,4 @@ export default class AddDayMutation extends Relay.Mutation {
     var dateString = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear();
     return { date: dateString, monthId: this.props.month.id };
   }
-
 }

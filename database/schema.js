@@ -8,7 +8,8 @@ import {
   GraphQLInt,
   GraphQLInputObjectType,
   GraphQLUnionType,
-  GraphQLInterfaceType
+  GraphQLInterfaceType,
+  GraphQLBoolean
 } from 'graphql';
 import {
   nodeDefinitions,
@@ -28,7 +29,8 @@ var getMaxId = function(arr){
   return (maxId + 1).toString();
 };
 
-var stats = [{id: "1", name: "Bench", type: "lift", value: "8x45", conf: 8},
+var stats = [
+             {id: "1", name: "Bench", type: "lift", value: "8x45", conf: 8},
              {id: "2", name: "Incline Machine", type: "lift", value: "8x45", conf: 8},
              {id: "3", name: "Pullup", type: "lift", value: "8x5", conf: 7},
              {id: "4", name: "stat", type: "lift", value: "8x45", conf: 8},
@@ -36,12 +38,37 @@ var stats = [{id: "1", name: "Bench", type: "lift", value: "8x45", conf: 8},
              {id: "6", name: "stat", type: "lift", value: "8x45", conf: 8}
            ];
 
-var statBlocks = [{id:"1", type: "statBlock", stats: ["1", "2", "3"]},
-                  {id:"2", type: "statBlock", stats: ["4", "5", "6"]}];
+var statBlocks = [
+                  {id:"1", type: "statBlock", stats: ["1", "2", "3"]},
+                  {id:"2", type: "statBlock", stats: ["4", "5", "6"]}
+                 ];
+
+var statBlockTypes = [
+                      {parentTypes: ["Day"], type: "Lower Raise"},
+                      {parentTypes: ["Day"], type: "Lower Split"},
+                      {parentTypes: ["Day"], type: "Upper Arms"},
+                      {parentTypes: ["Day"], type: "Upper Shoulders"},
+                      {parentTypes: ["Day"], type: "Sprints"},
+                      {parentTypes: ["Day"], type: "Stats"}
+];
+
+var statTypes = [
+                {parentTypes: ["Lower Raise", "Lower Split"], type: "Squat"},
+                {parentTypes: ["Lower Raise", "Lower Split"], type: "Deadlift"},
+                {parentTypes: ["Lower Split"], type: "Sitting Calf Raise"},
+                {parentTypes: ["Lower Split"], type: "Split Lunges"},
+                {parentTypes: ["Upper Arms"], type: "Burnout"}
+              ];
 
 var days = [{id: "1", date: "19-12-2015", statBlocks: ["1"]}];
 
 var months = [{id: "1", days: ["1"]}];
+
+var updateWeight = function(dayId, weight) {
+  var day = days[indexOfId(days, dayId)];
+  day.weight = weight;
+  days[indexOfId(days, dayId)] = day;
+}
 
 var getStat = function(id) {
   return stats.filter((e) => {return e.id === id;})[0];
@@ -100,6 +127,32 @@ var addStatBlockToParent = function(statBlock, parent) {
   return parent;
 }
 
+var getTypes = function(typeType, parentType) {
+  if (typeType == "StatBlock") {
+    return statBlockTypes
+                      .filter(function(e) {
+                        var parentOf = false;
+                        e.parentTypes.forEach(function(e){
+                          if (e === parentType) {
+                            parentOf = true;
+                          }
+                        });
+                        return parentOf;
+                      });
+  } else if (typeType == "Stat") {
+    return statTypes
+                .filter(function(e) {
+                  var parentOf = false;
+                  e.parentTypes.forEach(function(e){
+                    if (e === parentType) {
+                      parentOf = true;
+                    }
+                  });
+                  return parentOf;
+                });
+  }
+}
+
 var getNode = (globalId) => {
   var {type, id} = fromGlobalId(globalId);
   if (type === 'Stat') {
@@ -114,13 +167,11 @@ var getNode = (globalId) => {
 };
 
 var getType = (obj) => {
-  console.log("running");
   if (!obj.stats && !obj.statBlocks && !obj.days) {
     return statType;
   } else if (obj.stats) {
     return statBlockType;
   } else if (obj.statBlocks && !obj.days) {
-    console.log("here");
     return dayType;
   } else if (obj.days) {
     return monthType;
@@ -149,11 +200,14 @@ var statBlockType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField('StatBlock'),
     type: { type: GraphQLString },
-    prev: {
+    pre: {
       type: statBlockType,
       resolve: (statBlock) => getStatBlock(statBlock.prev)
     },
-    //add prevStat here with type StatBlock with a resolve that takes
+    statTypes: {
+      type: new GraphQLList(typeType),
+      resolve: (statBlock) => getTypes("Stat", statBlock.type)
+    },    //add prevStat here with type StatBlock with a resolve that takes
     //statblockid and returns a statblock.
     stats: {
       type: statConnection,
@@ -184,9 +238,16 @@ var statBlockParentInterface = new GraphQLInterfaceType({
     }
   }),
   resolveType(obj) {
-    console.log("running");
     return dayType;
   }
+});
+
+var typeType = new GraphQLObjectType({
+  name: 'Type',
+  fields: () => ({
+    parentTypes: { type: new GraphQLList(GraphQLString) },
+    type: { type: new GraphQLNonNull(GraphQLString) }
+  })
 });
 
 var dayType = new GraphQLObjectType({
@@ -194,12 +255,18 @@ var dayType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField('Day'),
     date: { type: GraphQLString },
+    weight: { type: GraphQLInt },
+    statBlockTypes: {
+                      type: new GraphQLList(typeType),
+                      resolve: () => {
+                          return getTypes('StatBlock', 'Day');
+                        }
+                    },
     statBlocks: {
       type: new GraphQLNonNull(statBlockConnection),
       args: connectionArgs,
       resolve: (day, args) => connectionFromArray(
         day.statBlocks.map((id) => {
-              console.log("resolving");
 			       return getStatBlock(id);
 		    }),
         args
@@ -215,6 +282,9 @@ var monthType = new GraphQLObjectType({
   name: 'Month',
   fields: () => ({
     id: globalIdField('Month'),
+    upToDate: {
+      type: GraphQLBoolean,
+    },
     days: {
       type: dayConnection,
       args: connectionArgs,
@@ -248,6 +318,27 @@ var addDayMutation = mutationWithClientMutationId({
   }
 });
 
+var updateWeightMutation = mutationWithClientMutationId({
+  name: 'UpdateWeight',
+  inputFields: {
+    dayId: { type: new GraphQLNonNull(GraphQLID) },
+    weight: { type: new GraphQLNonNull(GraphQLInt) }
+  },
+  outputFields: {
+    day: {
+      type: dayType,
+      resolve: (payload) => {
+        return getDay(payload.dayId);
+      }
+    }
+  },
+  mutateAndGetPayload: ({dayId, weight}) => {
+    dayId = fromGlobalId(dayId).id;
+    updateWeight(dayId, weight);
+    return dayId;
+  }
+});
+
 var addStatBlockToParentMutation = mutationWithClientMutationId({
   name: 'AddStatBlockToParent',
   inputFields: {
@@ -262,19 +353,15 @@ var addStatBlockToParentMutation = mutationWithClientMutationId({
   },
   outputFields: {
     parent: {
-      type: new GraphQLList(statBlockParentInterface),
+      type: dayType, // Look up how list types work (resolveType?) new GraphQLList(statBlockParentInterface),
       resolve: (payload) => {
-          console.log(3);
           var {type, id} = payload;
-          console.log(type);
           var day =  getNode(toGlobalId(type, id));
-          console.log(day.statBlocks);
           return day;
       }
     },
   },
   mutateAndGetPayload: ({statBlock, parentId}) => {
-    console.log(1);
     var parent = fromGlobalId(parentId);
     return addStatBlockToParent(statBlock, parent);
   }
@@ -369,7 +456,8 @@ module.exports = new GraphQLSchema({
     fields: () => ({
       addStat: addStatMutation,
       addDay: addDayMutation,
-      addStatBlockToParent: addStatBlockToParentMutation
+      addStatBlockToParent: addStatBlockToParentMutation,
+      updateWeight: updateWeightMutation
     })
   })
 });
