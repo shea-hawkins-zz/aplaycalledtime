@@ -53,7 +53,7 @@ type DayEdge {
 
 type Month implements Node {
   id: ID!
-  upToDate: Boolean
+  maxDate: String
   days(after: String, first: Int, before: String, last: Int): DayConnection
 }
 

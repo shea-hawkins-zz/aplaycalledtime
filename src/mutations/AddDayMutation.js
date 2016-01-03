@@ -15,6 +15,7 @@ export default class AddDayMutation extends Relay.Mutation {
     return Relay.QL`
     fragment on AddDayPayload {
         month {
+          maxDate,
           days
         }
       }
@@ -28,7 +29,7 @@ export default class AddDayMutation extends Relay.Mutation {
   }
   getVariables() {
     var today = new Date();
-    var dateString = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear();
+    var dateString = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
     return { date: dateString, monthId: this.props.month.id };
   }
 }

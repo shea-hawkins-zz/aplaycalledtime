@@ -22,15 +22,21 @@ const monthQuery = {
   month: () => Relay.QL`query { month(id: "1") }`
 };
 var App = function(props) {
-  return (<div className="ui divider">
-              <h1 className="ui header">A play called Time.</h1>
-              <div className="ui three item menu">
-                <Link to={`/month/`} className="item" activeClassName="active item">Stats</Link>
-                <Link to={`/month/`} className="item">Posts</Link>
-                <Link to={`/month/`} className="item">Drawings</Link>
+  return (<div className="page">
+            <div className="header">
+              <h1 className="ui inverted header">A Play Called Time.</h1>
+              <div className="ui inverted top menu">
+                <Link to={`/console/`} className="disabled teal item">Time</Link>
+                <Link to={`/console/`} className="disabled teal item">TBD</Link>
+                <Link to={`/console/`} className="teal item" activeClassName="active teal item">console.log()</Link>
               </div>
-            {props.children}
-          </div>);
+            </div>
+            <div className="ui hidden divider" />
+            <div className="ui container">
+              {props.children}
+            </div>
+          </div>
+        );
 };
 
 Model.subject.subscribe((appState) => {
@@ -48,7 +54,7 @@ Model.subject.subscribe((appState) => {
       <Route path="/" component={App}>
         <IndexRoute component={Days} queries={monthQuery} />
         <Route path="days/:dayId" component={Day} queries={dayQuery} />
-        <Route path="month" component={Days} queries={monthQuery} />
+        <Route path="console" component={Days} queries={monthQuery} />
         <Route path="*" component={Days} queries={monthQuery} />
       </Route>
     </RelayRouter>

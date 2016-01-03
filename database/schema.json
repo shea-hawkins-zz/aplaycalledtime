@@ -1008,12 +1008,12 @@
               "deprecationReason": null
             },
             {
-              "name": "upToDate",
+              "name": "maxDate",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "Boolean",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,

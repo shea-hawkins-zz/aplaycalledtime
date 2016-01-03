@@ -3,16 +3,17 @@ import Relay from 'react-relay';
 import StatBlock from './StatBlock';
 import StatInput from './StatInput';
 import StatBlockInput from './StatBlockInput';
+import ComponentBar from './ComponentBar';
 import { Link } from 'react-router';
 import AddStatBlockToDayMutation from '../mutations/AddStatBlockToDayMutation';
 import UpdateWeightMutation from '../mutations/UpdateWeightMutation';
 import Intent from '../state/Intent';
 
 var Weight = (props) => {
-    if (props.showNew) {
-      return <span>Noblesse Oblige</span>;
+    if (props.weight) {
+      return <h2 className="ui large violet label">{props.weight}</h2>;
     } else {
-      return <div><input onChange={props.handleChange} className="ui input"></input><button className="ui button" onClick={props.handleSubmit}>Commit</button></div>;
+      return <div><input onChange={props.handleChange} className="ui input" placeholder="Weight"></input><button className="ui violet button" onClick={props.handleSubmit}>Commit</button></div>;
     }
 }
 
@@ -31,6 +32,7 @@ class Day extends React.Component {
   };
   handleToggle() {
     Intent.toggleNew();
+    console.log(this.props.appState.showNew);
   };
   handleWeightSubmit() {
     Relay.Store.update(new UpdateWeightMutation({
@@ -42,24 +44,45 @@ class Day extends React.Component {
     this.weight = e.target.value;
   };
   render() {
+    var componentBar = [
+      {
+        component: Weight,
+        props: {
+            weight: this.props.day.weight,
+            handleChange: this.handleWeightChange.bind(this),
+            handleSubmit: this.handleWeightSubmit.bind(this)
+          }
+      },
+      {
+        component: StatBlockInput,
+        props: {
+          showNew: this.props.appState.showNew,
+          fields: {types: this.props.day.statBlockTypes},
+          handleChange: this.handleStatBlockChange.bind(this),
+          handleSubmit: this.handleStatBlockSubmit.bind(this),
+          handleToggle: this.handleToggle.bind(this)
+        }
+      }
+    ];
     return (
-      <div className="ui main container">
-        <div className="ui raised segment">
-          <Weight showNew={this.props.day.weight} handleChange={this.handleWeightChange.bind(this)} handleSubmit={this.handleWeightSubmit.bind(this)} />
-          <StatBlockInput showNew={this.props.appState.showNew} fields={{dropdown: this.props.day.statBlockTypes}} handleChange={this.handleStatBlockChange.bind(this)} handleSubmit={this.handleStatBlockSubmit.bind(this)} handleToggle={this.handleToggle.bind(this)} />
+      <div className="ui stackable grid">
+        <div className="ui four wide column">
+          <ComponentBar components={componentBar} />
         </div>
-                  {
-                    this.props.day.statBlocks.edges.map(
-                      (e) => {
-                      return (<div className="ui raised segment">
-                                  <StatBlock statBlock={e.node} />
-                                  <StatInput statBlock={e.node} />
-                                </div>);
-                      }
-                  )
-                }
-        </div>
-            );
+        <div className="ui ten wide column">
+                    {
+                      this.props.day.statBlocks.edges.map(
+                        (e) => {
+                        return (<div className="ui raised segment">
+                                    <StatBlock statBlock={e.node} />
+                                    <StatInput statBlock={e.node} />
+                                  </div>);
+                        }
+                    )
+                  }
+          </div>
+      </div>
+    );
   };
 }
 

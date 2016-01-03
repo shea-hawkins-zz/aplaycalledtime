@@ -32,15 +32,11 @@ var getMaxId = function(arr){
 var stats = [
              {id: "1", name: "Bench", type: "lift", value: "8x45", conf: 8},
              {id: "2", name: "Incline Machine", type: "lift", value: "8x45", conf: 8},
-             {id: "3", name: "Pullup", type: "lift", value: "8x5", conf: 7},
-             {id: "4", name: "stat", type: "lift", value: "8x45", conf: 8},
-             {id: "5", name: "stat", type: "lift", value: "8x45", conf: 8},
-             {id: "6", name: "stat", type: "lift", value: "8x45", conf: 8}
+             {id: "3", name: "Pullup", type: "lift", value: "8x5", conf: 7}
            ];
 
 var statBlocks = [
-                  {id:"1", type: "statBlock", stats: ["1", "2", "3"]},
-                  {id:"2", type: "statBlock", stats: ["4", "5", "6"]}
+                  {id:"1", type: "Upper Shoulders", stats: ["1", "2", "3"]}
                  ];
 
 var statBlockTypes = [
@@ -49,20 +45,42 @@ var statBlockTypes = [
                       {parentTypes: ["Day"], type: "Upper Arms"},
                       {parentTypes: ["Day"], type: "Upper Shoulders"},
                       {parentTypes: ["Day"], type: "Sprints"},
-                      {parentTypes: ["Day"], type: "Stats"}
+                      {parentTypes: ["Day"], type: "Stats"},
+                      {parentTypes: ["Day"], type: "Measurements"}
 ];
 
 var statTypes = [
                 {parentTypes: ["Lower Raise", "Lower Split"], type: "Squat"},
                 {parentTypes: ["Lower Raise", "Lower Split"], type: "Deadlift"},
+                {parentTypes: ["Upper Arms", "Upper Shoulders"], type: "Bench"},
+                {parentTypes: ["Upper Arms", "Upper Shoulders"], type: "Pullup"},
                 {parentTypes: ["Lower Split"], type: "Sitting Calf Raise"},
                 {parentTypes: ["Lower Split"], type: "Split Lunges"},
-                {parentTypes: ["Upper Arms"], type: "Burnout"}
+                {parentTypes: ["Lower Split"], type: "Sitting Squat"},
+                {parentTypes: ["Lower Raise"], type: "Standing Calf Raise"},
+                {parentTypes: ["Lower Raise"], type: "Curl"},
+                {parentTypes: ["Lower Raise"], type: "V-Squat"},
+                {parentTypes: ["Upper Shoulders"], type: "Arnold Press"},
+                {parentTypes: ["Upper Shoulders"], type: "Incline Row"},
+                {parentTypes: ["Upper Shoulders"], type: "Incline Bench"},
+                {parentTypes: ["Upper Arms"], type: "Tri Machine"},
+                {parentTypes: ["Upper Arms"], type: "Curl"},
+                {parentTypes: ["Upper Arms"], type: "Burnout"},
+                {parentTypes: ["Sprints"], type: "Sprint"},
+                {parentTypes: ["Sprints"], type: "Swim"},
+                {parentTypes: ["Sprints"], type: "Box"},
+                {parentTypes: ["Stats"], type: "Waist"},
+                {parentTypes: ["Stats"], type: "Chest"},
+                {parentTypes: ["Stats"], type: "LArm"},
+                {parentTypes: ["Stats"], type: "RArm"},
+                {parentTypes: ["Stats"], type: "LLeg"},
+                {parentTypes: ["Stats"], type: "RLeg"}
               ];
 
-var days = [{id: "1", date: "19-12-2015", statBlocks: ["1"]}];
+var days = [{id: "1", date: "19-12-2015", statBlocks: ["1"]},
+            {id: "2", date: "31-12-2015", statBlocks: []}];
 
-var months = [{id: "1", days: ["1"]}];
+var months = [{id: "1", days: ["1", "2"], maxDate: "31-12-2015"}];
 
 var updateWeight = function(dayId, weight) {
   var day = days[indexOfId(days, dayId)];
@@ -116,6 +134,7 @@ var createDay = function(date, monthId) {
   var day = {id: dayId, date: date, statBlocks: []};
   days.push(day);
   months[indexOfId(months, monthId)].days.push(day.id);
+  months[indexOfId(months, monthId)].maxDate = day.date;
   return {month: months[indexOfId(months, monthId)], newDayEdge: day};
 }
 
@@ -282,8 +301,8 @@ var monthType = new GraphQLObjectType({
   name: 'Month',
   fields: () => ({
     id: globalIdField('Month'),
-    upToDate: {
-      type: GraphQLBoolean,
+    maxDate: {
+      type: GraphQLString,
     },
     days: {
       type: dayConnection,
@@ -335,7 +354,7 @@ var updateWeightMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({dayId, weight}) => {
     dayId = fromGlobalId(dayId).id;
     updateWeight(dayId, weight);
-    return dayId;
+    return {dayId: dayId};
   }
 });
 

@@ -4,6 +4,7 @@ import AddStatMutation from '../mutations/AddStatMutation';
 
 class StatInput extends Component {
   newStat = {
+                      name: this.props.statBlock.statTypes[0].type,
                       type: "lift"
                     };
   addStat = () => {
