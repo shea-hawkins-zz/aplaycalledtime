@@ -1,10 +1,14 @@
 import Rx from 'rxjs';
 
 var subjects = {
-  toggleNewSubject: new Rx.Subject()
+  toggleNewSubject: new Rx.Subject(),
+  toggleGoalUpdateSubject: new Rx.Subject(),
+  toggleGoalShowSubject: new Rx.Subject()
 };
 
 export default {
   subjects: subjects,
-  toggleNew: () => subjects.toggleNewSubject.next()
+  toggleNew: () => subjects.toggleNewSubject.next(),
+  toggleGoalUpdate: () => subjects.toggleGoalUpdateSubject.next(),
+  toggleGoalShow: () => subjects.toggleGoalShowSubject.next()
 }

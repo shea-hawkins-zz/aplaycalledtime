@@ -4,9 +4,6 @@ import Relay from 'react-relay';
 class StatBlock extends Component {
   render() {
     return (<div>
-      <div className="ui large teal ribbon label">
-        <i className="line chart icon" /><a>{this.props.statBlock.type}</a>
-      </div>
       <table className="ui celled padded table">
         <thead>
           <tr><th className="single line">Stat</th>

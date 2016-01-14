@@ -21,7 +21,8 @@ import {
   connectionDefinitions,
   mutationWithClientMutationId
 } from 'graphql-relay';
-
+//On addition of graphql SubmitJournal, convert from markdown immediately and store markdown + html in
+//database or memory.
 var getMaxId = function(arr){
   var maxId = arr.reduce((mem, e) => {
     return Math.max(mem, e.id);
@@ -32,7 +33,10 @@ var getMaxId = function(arr){
 var stats = [
              {id: "1", name: "Bench", type: "lift", value: "8x45", conf: 8},
              {id: "2", name: "Incline Machine", type: "lift", value: "8x45", conf: 8},
-             {id: "3", name: "Pullup", type: "lift", value: "8x5", conf: 7}
+             {id: "3", name: "Pullup", type: "lift", value: "8x5", conf: 7},
+             {id: "4", name: "Bench", type: "goal", value: "8x50"},
+             {id: "5", name: "Incline Machine", type: "goal", value: "8x50"},
+             {id: "6", name: "Pullup", type: "goal", value: "8x5"}
            ];
 
 var statBlocks = [
@@ -47,6 +51,10 @@ var statBlockTypes = [
                       {parentTypes: ["Day"], type: "Sprints"},
                       {parentTypes: ["Day"], type: "Stats"},
                       {parentTypes: ["Day"], type: "Measurements"}
+];
+
+var goals = [
+  {id: "7", type: "Upper Shoulders", stats: ["4", "5", "6"]}
 ];
 
 var statTypes = [
@@ -82,10 +90,31 @@ var days = [{id: "1", date: "19-12-2015", statBlocks: ["1"]},
 
 var months = [{id: "1", days: ["1", "2"], maxDate: "31-12-2015"}];
 
+var journey = [{id: "1", date: "13-1-2016", title: "On Routine", preview: "The path wears the more it is walked.", content: {
+                                                                                    silver-markdown: "And along the path, you find a pen.",
+                                                                                    silver-html: "<span>And along the path, you find a pen.<span>",
+                                                                                    gold-markdown: "And along the path, you find a brush.",
+                                                                                    gold-html: "<span>And along the path, you find a brush.</span>"
+                                                                                    }}];
+
 var updateWeight = function(dayId, weight) {
   var day = days[indexOfId(days, dayId)];
   day.weight = weight;
   days[indexOfId(days, dayId)] = day;
+}
+
+var updateStat = function(stat) {
+	console.log(stat.id);
+  var orStat = stats[indexOfId(stats, stat.id)];
+  for (var key in stat) {
+    orStat[key] = stat[key];
+  }
+  stats[indexOfId(stats, stat.id)] = orStat;
+  return stats[indexOfId(stats, stat.id)];
+}
+
+var getJournal = function(id) {
+  return journey[indexOfId(journey, id)];
 }
 
 var getStat = function(id) {
@@ -94,6 +123,14 @@ var getStat = function(id) {
 
 var getStatBlock = function(id) {
   return statBlocks[indexOfId(statBlocks, id)];
+}
+
+var getGoal = function(type) {
+  var goal = goals.filter(function(e) {
+    return e.type === type;
+  });
+  console.log("goal");
+  return goal[0];
 }
 
 var getDay = function(id){
@@ -194,11 +231,33 @@ var getType = (obj) => {
     return dayType;
   } else if (obj.days) {
     return monthType;
+  } else if (obj.content) {
+    return journalType;
   }
 };
 
 var {nodeInterface, nodeField} = nodeDefinitions(getNode, getType);
+//JourneyTypes
+var journalType = new GraphQLObjectType({
+  name: 'Journal',
+  fields: () => ({
+    id: globalIdField('Journal'),
+    date: { type: GraphQLString },
+    title: { type: GraphQLString },
+    content: { type: new GraphQLObjectType({
+        name: 'JournalContent',
+        fields: {
+          silver-markdown: { type: GraphQLString },
+          silver-html: { type: GraphQLString },
+          gold-markdown: { type: GraphQLString },
+          gold-html: { type: GraphQLString }
+        }
+      })}
+  }),
+  interfaces: [nodeInterface]
+});
 
+//consoleTypes
 var statType = new GraphQLObjectType({
   name: 'Stat',
   fields: () => ({
@@ -219,9 +278,9 @@ var statBlockType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField('StatBlock'),
     type: { type: GraphQLString },
-    pre: {
+    goal: {
       type: statBlockType,
-      resolve: (statBlock) => getStatBlock(statBlock.prev)
+      resolve: (statBlock) => getGoal(statBlock.type)
     },
     statTypes: {
       type: new GraphQLList(typeType),
@@ -397,7 +456,7 @@ var addStatMutation = mutationWithClientMutationId({
           name: { type: new GraphQLNonNull(GraphQLString) },
           type: { type: new GraphQLNonNull(GraphQLString) },
           value: { type: new GraphQLNonNull(GraphQLString) },
-          conf: { type: new GraphQLNonNull(GraphQLInt) }
+          conf: { type: GraphQLInt }
         }
       }))
     }
@@ -418,6 +477,36 @@ var addStatMutation = mutationWithClientMutationId({
     return {
       statId: newStat.id,
       statBlockId: localStatBlockId,
+    };
+  }
+});
+
+var updateStatMutation = mutationWithClientMutationId({
+  name: 'UpdateStat',
+  inputFields: {
+    stat: { type: new GraphQLNonNull(new GraphQLInputObjectType({
+        name: 'StatUpdateInput',
+        fields: {
+          id: { type: new GraphQLNonNull(GraphQLID) },
+          name: { type: GraphQLString },
+          type: { type: GraphQLString },
+          value: { type: GraphQLString },
+          conf: { type: GraphQLInt }
+        }
+      }))
+    }
+  },
+  outputFields: {
+    stat: {
+      type: statType,
+      resolve: (payload) => payload.stat
+    }
+  },
+  mutateAndGetPayload: ({stat}) => {
+    stat.id = fromGlobalId(stat.id).id;
+    var stat = updateStat(stat);
+    return {
+      stat: stat
     };
   }
 });
@@ -476,7 +565,8 @@ module.exports = new GraphQLSchema({
       addStat: addStatMutation,
       addDay: addDayMutation,
       addStatBlockToParent: addStatBlockToParentMutation,
-      updateWeight: updateWeightMutation
+      updateWeight: updateWeightMutation,
+      updateStat: updateStatMutation
     })
   })
 });

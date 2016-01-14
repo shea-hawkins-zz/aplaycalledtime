@@ -11,8 +11,9 @@ import update from 'react-addons-update';
 import Model from './state/Model';
 
 //Application
-import Day from './components/Day';
-import Days from './components/Days';
+import Day from './console/components/Day';
+import Days from './console/components/Days';
+import Journey from './journey/Journey';
 
 const history = createBrowserHistory();
 const dayQuery = {
@@ -26,8 +27,8 @@ var App = function(props) {
             <div className="header">
               <h1 className="ui inverted header">A Play Called Time.</h1>
               <div className="ui inverted top menu">
-                <Link to={`/console/`} className="disabled teal item">Time</Link>
-                <Link to={`/console/`} className="disabled teal item">TBD</Link>
+                <Link to={`/journey/`} className="disabled teal item">Time</Link>
+                <Link to={`/journey/`} className="teal item" activeClassName="active teal item">Journey</Link>
                 <Link to={`/console/`} className="teal item" activeClassName="active teal item">console.log()</Link>
               </div>
             </div>
@@ -55,6 +56,7 @@ Model.subject.subscribe((appState) => {
         <IndexRoute component={Days} queries={monthQuery} />
         <Route path="days/:dayId" component={Day} queries={dayQuery} />
         <Route path="console" component={Days} queries={monthQuery} />
+        <Route path="journey" component={Journey} />
         <Route path="*" component={Days} queries={monthQuery} />
       </Route>
     </RelayRouter>

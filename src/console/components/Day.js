@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
-import StatBlock from './StatBlock';
-import StatInput from './StatInput';
 import StatBlockInput from './StatBlockInput';
+import WorkoutItem from './WorkoutItem';
 import ComponentBar from './ComponentBar';
 import { Link } from 'react-router';
 import AddStatBlockToDayMutation from '../mutations/AddStatBlockToDayMutation';
 import UpdateWeightMutation from '../mutations/UpdateWeightMutation';
-import Intent from '../state/Intent';
+import Intent from '../../state/Intent';
 
 var Weight = (props) => {
     if (props.weight) {
@@ -16,6 +15,8 @@ var Weight = (props) => {
       return <div><input onChange={props.handleChange} className="ui input" placeholder="Weight"></input><button className="ui violet button" onClick={props.handleSubmit}>Commit</button></div>;
     }
 }
+
+
 
 class Day extends React.Component {
   //Sets a default value
@@ -32,7 +33,6 @@ class Day extends React.Component {
   };
   handleToggle() {
     Intent.toggleNew();
-    console.log(this.props.appState.showNew);
   };
   handleWeightSubmit() {
     Relay.Store.update(new UpdateWeightMutation({
@@ -73,10 +73,7 @@ class Day extends React.Component {
                     {
                       this.props.day.statBlocks.edges.map(
                         (e) => {
-                        return (<div className="ui raised segment">
-                                    <StatBlock statBlock={e.node} />
-                                    <StatInput statBlock={e.node} />
-                                  </div>);
+                          return (<WorkoutItem appState={this.props.appState} statBlock={e.node} />);
                         }
                     )
                   }
@@ -99,9 +96,7 @@ export default Relay.createContainer(Day, {
         statBlocks(first: 10) {
           edges {
             node {
-              id,
-              ${StatInput.getFragment('statBlock')},
-              ${StatBlock.getFragment('statBlock')}
+              ${WorkoutItem.getFragment('statBlock')}
             }
           }
         }

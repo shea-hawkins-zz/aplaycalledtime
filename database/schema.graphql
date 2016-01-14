@@ -62,6 +62,7 @@ type Mutation {
   addDay(input: AddDayInput!): AddDayPayload
   addStatBlockToParent(input: AddStatBlockToParentInput!): AddStatBlockToParentPayload
   updateWeight(input: UpdateWeightInput!): UpdateWeightPayload
+  updateStat(input: UpdateStatInput!): UpdateStatPayload
 }
 
 interface Node {
@@ -95,7 +96,7 @@ type Stat implements Node {
 type StatBlock implements Node {
   id: ID!
   type: String
-  pre: StatBlock
+  goal: StatBlock
   statTypes: [Type]
   stats(after: String, first: Int, before: String, last: Int): StatConnection
 }
@@ -133,12 +134,30 @@ input StatInput {
   name: String!
   type: String!
   value: String!
-  conf: Int!
+  conf: Int
+}
+
+input StatUpdateInput {
+  id: ID!
+  name: String!
+  type: String!
+  value: String!
+  conf: Int
 }
 
 type Type {
   parentTypes: [String]
   type: String!
+}
+
+input UpdateStatInput {
+  stat: StatUpdateInput!
+  clientMutationId: String!
+}
+
+type UpdateStatPayload {
+  stat: Stat
+  clientMutationId: String!
 }
 
 input UpdateWeightInput {
