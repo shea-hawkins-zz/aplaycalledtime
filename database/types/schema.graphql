@@ -113,7 +113,7 @@ type Query {
   statBlock(id: ID): StatBlock
   statBlocks(after: String, first: Int, before: String, last: Int): StatBlockConnection
   day(id: ID): Day
-  log: Log
+  log(id: ID): Log
   node(id: ID!): Node
 }
 

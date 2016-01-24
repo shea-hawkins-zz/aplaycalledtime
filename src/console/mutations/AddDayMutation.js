@@ -2,8 +2,8 @@ import Relay from 'react-relay';
 
 export default class AddDayMutation extends Relay.Mutation {
   static fragments = {
-    month: () => Relay.QL`
-      fragment on Month {
+    log: () => Relay.QL`
+      fragment on Log {
         id
       }
     `
@@ -14,7 +14,7 @@ export default class AddDayMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
     fragment on AddDayPayload {
-        month {
+        log {
           maxDate,
           days
         }
@@ -24,12 +24,12 @@ export default class AddDayMutation extends Relay.Mutation {
   getConfigs() {
     return [{
       type: 'FIELDS_CHANGE',
-      fieldIDs: {month: this.props.month.id}
+      fieldIDs: {log: this.props.log.id}
     }];
   }
   getVariables() {
     var today = new Date();
     var dateString = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
-    return { date: dateString, monthId: this.props.month.id };
+    return { date: dateString, logId: this.props.log.id };
   }
 }

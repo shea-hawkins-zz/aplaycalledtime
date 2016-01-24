@@ -12,15 +12,18 @@ import Model from './state/Model';
 
 //Application
 import Day from './console/components/Day';
-import Days from './console/components/Days';
+import Log from './console/components/Log';
 import Journey from './journey/Journey';
 
 const history = createBrowserHistory();
 const dayQuery = {
   day: () => Relay.QL`query { day(id: $dayId) }`
 };
-const monthQuery = {
-  month: () => Relay.QL`query { month(id: "1") }`
+const logQuery = {
+  log: () => Relay.QL`query { log }`
+};
+const journeyQuery = {
+  journey: () => Relay.QL`query { journey(id: "1") }`
 };
 var App = function(props) {
   return (<div className="page">
@@ -53,11 +56,11 @@ Model.subject.subscribe((appState) => {
   render((
     <RelayRouter history={history} createElement={createElement}>
       <Route path="/" component={App}>
-        <IndexRoute component={Days} queries={monthQuery} />
+        <IndexRoute component={Journey} />
         <Route path="days/:dayId" component={Day} queries={dayQuery} />
-        <Route path="console" component={Days} queries={monthQuery} />
-        <Route path="journey" component={Journey} />
-        <Route path="*" component={Days} queries={monthQuery} />
+        <Route path="console" component={Log} queries={logQuery} />
+        <Route path="journey" component={Journey}/>
+        <Route path="*" component={Journey}  />
       </Route>
     </RelayRouter>
   ), document.getElementById('root'));

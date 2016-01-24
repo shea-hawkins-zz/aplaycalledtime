@@ -17,14 +17,14 @@ var NewDay = (props) => {
   }
 };
 
-class Days extends React.Component {
+class Log extends React.Component {
   handleNewDayClick = (e) => {
     Relay.Store.update(new AddDayMutation({
-        month: this.props.month
+        log: this.props.log
     }));
   }
   render() {
-    var splitDate = this.props.month.maxDate.split('-');
+    var splitDate = this.props.log.maxDate.split('-');
     var lastDate = new Date(splitDate[2], splitDate[1] - 1, splitDate[0]);
     var today = new Date();
     var todayFloored = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -42,7 +42,7 @@ class Days extends React.Component {
                 </div>
                 <div className="ui ten wide column">
                   <div className="ui main container">
-                    {this.props.month.days.edges.map(function(e){
+                    {this.props.log.days.edges.map(function(e){
                         return <DayItem day={e.node} />;
                     })}
                   </div>
@@ -51,12 +51,12 @@ class Days extends React.Component {
   };
 }
 
-export default Relay.createContainer(Days, {
+export default Relay.createContainer(Log, {
   fragments: {
-    month: () => Relay.QL `
-      fragment on Month {
+    log: () => Relay.QL `
+      fragment on Log {
           id,
-          ${AddDayMutation.getFragment('month')},
+          ${AddDayMutation.getFragment('log')},
           maxDate,
           days(last: 10) {
             edges {
