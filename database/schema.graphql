@@ -1,5 +1,4 @@
 input AddDayInput {
-  date: String
   logId: ID!
   clientMutationId: String!
 }

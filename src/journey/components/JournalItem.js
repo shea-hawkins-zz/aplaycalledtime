@@ -18,7 +18,7 @@ export default class JournalItem extends React.Component {
 
 export default Relay.createContainer(JournalItem, {
   fragments: {
-    journal: () => Relay.QL `
+    journal: () => Relay.QL`
       fragment on Journal {
         id,
         date,

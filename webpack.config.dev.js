@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 
-
 var babelConfig = {
   stage: 0,
   env: {
@@ -19,7 +18,22 @@ var babelConfig = {
           }]
         }
       }
-    }
+    },
+    production: {
+      plugins: ["react-transform", './build/babelRelayPlugin'],
+      extra: {
+        "react-transform": {
+          transforms: [{
+            transform: "react-transform-hmr",
+            imports: ["react"],
+            locals: ["module"]
+          }, {
+            transform: "react-transform-catch-errors",
+            imports: ["react", "redbox-react"]
+          }]
+        }
+      }
+    },
   }
 };
 

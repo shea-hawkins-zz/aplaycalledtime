@@ -6,6 +6,9 @@ var babelConfig = {
   env: {
     development: {
       plugins: ['./build/babelRelayPlugin'],
+    },
+    production: {
+      plugins: ['./build/babelRelayPlugin'],
     }
   }
 };

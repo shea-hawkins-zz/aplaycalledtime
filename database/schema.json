@@ -1838,16 +1838,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "date",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "logId",
               "description": null,
               "type": {
