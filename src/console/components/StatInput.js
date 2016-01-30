@@ -8,7 +8,7 @@ class StatInput extends Component {
                       type: "lift"
                     };
   addStat = () => {
-    console.log(Object.keys(this.newStat));
+    console.log(this.newStat.value);
     Relay.Store.update(new AddStatMutation({
         statBlock: this.props.statBlock,
         stat: this.newStat

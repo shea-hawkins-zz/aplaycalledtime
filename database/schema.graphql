@@ -83,7 +83,8 @@ type Journey implements Node {
 
 type Log implements Node {
   id: ID!
-  maxDate: String
+  lastUpdate: String
+  isUpdateable: Boolean
   days(after: String, first: Int, before: String, last: Int): DayConnection
 }
 
@@ -111,7 +112,6 @@ type Query {
   journey(id: ID): Journey
   stat(id: ID): Stat
   statBlock(id: ID): StatBlock
-  statBlocks(after: String, first: Int, before: String, last: Int): StatBlockConnection
   day(id: ID): Day
   log: Log
   node(id: ID!): Node
@@ -179,6 +179,7 @@ input StatUpdateInput {
 }
 
 type Type {
+  objectType: String!
   parentTypes: [String]
   type: String!
 }

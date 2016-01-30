@@ -20,7 +20,7 @@ var rethinkTime = function rethinkTime(connection) {
           .insert(stat)
             .run(connection, function(err, result) {
               if (err) reject(err);
-              resolve(result);
+              resolve({result: result, statId: result.generated_keys[0]});
             });
       });
     },
@@ -30,7 +30,7 @@ var rethinkTime = function rethinkTime(connection) {
           .insert(statBlock)
             .run(connection, function(err, result) {
               if (err) reject(err);
-              resolve(result);
+              resolve({result: result, statBlockId: result.generated_keys[0]});
             });
       });
     },
@@ -40,7 +40,7 @@ var rethinkTime = function rethinkTime(connection) {
           .insert(day)
             .run(connection, function(err, result) {
               if (err) reject(err);
-              resolve(result);
+              resolve({result: result, dayId: result.generated_keys[0]});
             });
       });
     },
@@ -51,30 +51,30 @@ var rethinkTime = function rethinkTime(connection) {
               .update({stats: r.row("stats").append(statId)})
                 .run(connection, function(err, result) {
                   if (err) reject(err);
-                  resolve(result);
+                  resolve({result: result, statId: statId, statBlockId: statBlockId});
                 });
       });
     },
-    addStatBlockToDay: function addStatBlockToDay(statBlockId, dayId) {
+    addStatBlockToDay: function addStatBlockToDay(statBlockId, parentId) {
       return new Promise(function (resolve, reject) {
         r.db('console').table('days')
-          .get(dayId)
+          .get(parentId)
             .update({statBlocks: r.row("statBlocks").append(statBlockId)})
               .run(connection, function(err, result) {
                 if (err) reject(err);
-                resolve(result);
+                resolve({result: result, statBlockId: statBlockId, parentId: parentId});
               });
       });
     },
-    addDayToLog: function addStatBlockToLog(dayId, monthId) {
+    addDayToLog: function addStatBlockToLog(dayId, dateString, logId) {
       return new Promise(function (resolve, reject) {
-        r.db('console').table('months')
-          .get(dayId)
-            .update({statBlocks: r.row("statBlocks").append(statBlockId)})
-              .run(connection, function(err, result) {
-                if (err) reject(err);
-                resolve(result);
-              });
+        r.db('console').table('log')
+          .get(logId)
+            .update({days: r.row("days").append(dayId), lastUpdate: dateString})
+        .run(connection, function(err, result) {
+                  if (err) reject(err);
+                  resolve({result: result, dayId: dayId, logId: logId});
+                });
       });
     },
     getStat: function getStat(statId) {
@@ -176,7 +176,7 @@ var rethinkTime = function rethinkTime(connection) {
             .update(stat)
               .run(connection, function(err, result) {
                 if (err) reject(err);
-                resolve(result);
+                resolve({result: result, stat:stat});
               });
       });
     },

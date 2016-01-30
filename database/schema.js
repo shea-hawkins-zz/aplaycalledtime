@@ -219,8 +219,18 @@ var logType = new GraphQLObjectType({
   name: 'Log',
   fields: () => ({
     id: globalIdField('Log'),
-    maxDate: {
+    lastUpdate: {
       type: GraphQLString,
+    },
+    isUpdateable: {
+      type: GraphQLBoolean,
+      resolve: (log) => {
+        var splitDate = log.lastUpdate.split('-');
+        var lastDate = new Date(splitDate[2], splitDate[1] - 1, splitDate[0]);
+        var today = new Date();
+        var todayFloored = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        return lastDate.getTime() < todayFloored.getTime() ? true : false;
+      }
     },
     days: {
       type: dayConnection,
@@ -241,21 +251,36 @@ var logType = new GraphQLObjectType({
 var addDayMutation = mutationWithClientMutationId({
   name: 'AddDay',
   inputFields: {
-    date: { type: GraphQLString },
     logId: { type: new GraphQLNonNull(GraphQLID)}
   },
   outputFields: {
     log: {
       type: logType,
-      resolve: (payload) => payload.log
+      resolve: (payload) => Time.getLog(payload.logId)
     },
     newDayEdge: {
       type: dayType,
-      resolve: (payload) => payload.newDayEdge
+      resolve: (payload) => Time.getDay(payload.dayId)
     }
   },
-  mutateAndGetPayload: ({date, logId}) => {
-    return Time.createDay({date: date, statBlocks: []}).then(function(result) {
+  mutateAndGetPayload: ({logId}) => {
+    var today = new Date();
+    var dateString = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+    var logId = fromGlobalId(logId).id;
+    return Time.getLog(logId).then(function(result) {
+      var splitDate = result.lastUpdate.split('-');
+      var lastDate = new Date(splitDate[2], splitDate[1] - 1, splitDate[0]);
+      var today = new Date();
+      var todayFloored = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      if (lastDate.getTime() >= todayFloored.getTime()) {
+        throw 'not updatable!';
+      }
+    }).then(function () {
+      return Time.createDay({date: dateString, statBlocks: []});
+    }).then(function (result) {
+      return Time.addDayToLog(result.dayId, dateString, logId);
+    }).catch(function (err) {
+      console.log(err);
     });
   }
 });
@@ -275,6 +300,7 @@ var updateWeightMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({dayId, weight}) => {
+    console.log(dayId);
     dayId = fromGlobalId(dayId).id;
     return Time.updateWeight(dayId, weight);
   }
@@ -306,7 +332,9 @@ var addStatBlockToParentMutation = mutationWithClientMutationId({
     var parentId = fromGlobalId(parentId).id;
     statBlock.stats = [];
     return Time.createStatBlock(statBlock).then(function (result) {
-      return Time.addStatBlockToDay(result.generated_keys[0], parentId);
+      return Time.addStatBlockToDay(result.statBlockId, parentId);
+    }).then(function (result) {
+      return {type: "Day", id: result.parentId};
     });
   }
 });
@@ -339,11 +367,14 @@ var addStatMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({stat, statBlockId}) => {
     var localStatBlockId = fromGlobalId(statBlockId).id;
-    var newStat = Time.createStat(stat, localStatBlockId);
-    return {
-      statId: newStat.id,
-      statBlockId: localStatBlockId,
-    };
+    return Time.createStat(stat).then(function(result) {
+      return Time.addStatToBlock(result.statId, localStatBlockId);
+    }).then(function(result) {
+      return {
+        statId: result.statId,
+        statBlockId: result.statBlockId
+      };
+    });
   }
 });
 

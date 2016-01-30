@@ -24,16 +24,11 @@ class Log extends React.Component {
     }));
   }
   render() {
-    var splitDate = this.props.log.maxDate.split('-');
-    var lastDate = new Date(splitDate[2], splitDate[1] - 1, splitDate[0]);
-    var today = new Date();
-    var todayFloored = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    var showNew = lastDate.getTime() < todayFloored.getTime() ? true : false;
     var componentBar = [{
       component: NewDay,
       props: {
         handleClick: this.handleNewDayClick.bind(this),
-        showNew: showNew
+        showNew: this.props.log.isUpdateable
       }
     }];
     return (<div className="ui stackable grid">
@@ -57,7 +52,7 @@ export default Relay.createContainer(Log, {
       fragment on Log {
           id,
           ${AddDayMutation.getFragment('log')},
-          maxDate,
+          isUpdateable,
           days(last: 10) {
             edges {
               node {

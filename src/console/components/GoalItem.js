@@ -1,7 +1,6 @@
 import React from 'react';
 import Relay from 'react-relay';
 import Goal from './Goal';
-import GoalUpdate from './GoalUpdate';
 import UpdateStatMutation from '../mutations/UpdateStatMutation';
 import Intent from '../../state/Intent';
 
