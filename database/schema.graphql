@@ -61,8 +61,8 @@ type Journal implements Node {
   date: String
   title: String
   preview: String
-  markdown: [Content]
-  html: [Content]
+  markdown: Content
+  html: Content
 }
 
 type JournalConnection {
@@ -108,7 +108,7 @@ type PageInfo {
 
 type Query {
   journal(id: ID): Journal
-  journey(id: ID): Journey
+  journey: Journey
   stat(id: ID): Stat
   statBlock(id: ID): StatBlock
   day(id: ID): Day

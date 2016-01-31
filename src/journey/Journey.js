@@ -35,60 +35,50 @@ class Journey extends React.Component {
   };
 }
 
-
-// {this.props.journey.journals.edges.map(function (e) {
-//   return
-//     <Motion defaultStyle={{x: 0}} style={{x: spring(10)}}>
-//       {(value) => {
-//         /**<JournalItem style={value} key={e.node.id} journal={e.node} />**/
-//         <div>value.x</div>;
-//       }}
-//     </Motion>;
-// })}
-export default () => {
-  var journey = {
-    id: "8",
-    journals: {
-      edges:
-        [
-          {node: {
-            id: "9",
-            date: "1-20-2016",
-            title: "One Third",
-            preview: "One Third Booted"
-          }},
-          {node: {
-            id: "11",
-            date: "1-21-2016",
-            title: "Two Thirds",
-            preview: "Two Thirds Booted"
-          }},
-          {node: {
-            id: "10",
-            date: "1-22-2016",
-            title: "Complete",
-            preview: "Three Thirds Booted"
-          }},
-        ]
-      }
-    }
-    return <Journey journey={journey} />;
-  }
-
-// export default Relay.createContainer(Journey, {
-//   fragments: {
-//     journey: () => Relay.QL `
-//       fragment on Journey {
-//         id,
-//         journals(last: 5) {
-//           edges {
-//             node {
-//               id,
-//               ${JournalItem.getFragment('journal')}
-//             }
-//           }
-//         }
+// export default () => {
+//   var journey = {
+//     id: "8",
+//     journals: {
+//       edges:
+//         [
+//           {node: {
+//             id: "9",
+//             date: "1-20-2016",
+//             title: "One Third",
+//             preview: "One Third Booted"
+//           }},
+//           {node: {
+//             id: "11",
+//             date: "1-21-2016",
+//             title: "Two Thirds",
+//             preview: "Two Thirds Booted"
+//           }},
+//           {node: {
+//             id: "10",
+//             date: "1-22-2016",
+//             title: "Complete",
+//             preview: "Three Thirds Booted"
+//           }},
+//         ]
 //       }
-//     `
+//     }
+//     return <Journey journey={journey} />;
 //   }
-// });
+
+export default Relay.createContainer(Journey, {
+  fragments: {
+    journey: () => Relay.QL `
+      fragment on Journey {
+        id,
+        journals(last: 5) {
+          edges {
+            node {
+              id,
+              ${JournalItem.getFragment('journal')}
+            }
+          }
+        }
+      }
+    `
+  }
+});

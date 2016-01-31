@@ -140,7 +140,7 @@ var rethinkTime = function rethinkTime(connection) {
     },
     getJourney: function getJourney() {
       return new Promise(function (resolve, reject) {
-        r.db('journey').table('journals')
+        r.db('journey').table('journey')
           .get(8)
             .run(connection, function(err, result) {
               if (err) reject(err);
@@ -151,13 +151,23 @@ var rethinkTime = function rethinkTime(connection) {
     getContent: function getContent(id) {
       return new Promise(function (resolve, reject) {
         r.db('journey').table('content')
-          .get(statBlockId)
+          .get(id)
             .run(connection, function(err, result) {
               if (err) reject(err);
               resolve(result);
             });
       });
     },
+    addJournalToJourney: function addJournalToJourney(journalId) {
+      r.db('journey').table('journey')
+        .get(8)
+          .update({journals: r.row('journals').append(journalId)})
+            .run(connection, function(err, result) {
+                      if (err) reject(err);
+                      resolve({result: result, journalId: journalId});
+                    });
+    },
+    addContentToJournal: function addContentToJournal() {},
     updateWeight: function updateWeight(dayId, weight) {
       return new Promise(function (resolve, reject) {
         r.db('console').table('days')

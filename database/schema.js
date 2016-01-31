@@ -73,17 +73,13 @@ var journalType = new GraphQLObjectType({
     title: { type: GraphQLString },
     preview: { type: GraphQLString },
     markdown: {
-      type: new GraphQLList(contentType),
-      resolve: (journal) => journal.markdown.map(function(e){
-        return Time.getContent(e);
-      })
-    },
+                type: contentType,
+                resolve: (journal) => Time.getContent(journal.markdown)
+              },
     html: {
-      type: new GraphQLList(contentType),
-      resolve: (journal) => journal.html.map(function(e) {
-        return Time.getContent(e);
-      })
-    }
+            type: contentType,
+            resolve: (journal) => Time.getContent(journal.html)
+          }
   }),
   interfaces: [nodeInterface]
 });
@@ -422,13 +418,8 @@ module.exports = new GraphQLSchema({
       },
       journey: {
         type: journeyType,
-        args: {
-          id: {
-            type: GraphQLID
-          }
-        },
         resolve: function(_, args) {
-          return Time.getJourney(fromGlobalId(args.id).id);
+          return Time.getJourney();
         }
       },
       stat: {

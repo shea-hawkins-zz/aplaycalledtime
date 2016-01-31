@@ -40,18 +40,7 @@
             {
               "name": "journey",
               "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Journey",
@@ -246,13 +235,9 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Content",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Content",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -262,13 +247,9 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Content",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Content",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null

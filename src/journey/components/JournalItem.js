@@ -7,10 +7,17 @@ export default class JournalItem extends React.Component {
   render() {
     var componentBar = [];
     return (
-                  <div className="ui main container">
-                    <div style={{position: "relative", left: 300 + (-this.props.style.x) + "px", opacity: this.props.style.y}} className="ui raised segment">
+                  <div style={{position: "relative", left: 300 + (-this.props.style.x) + "px", opacity: this.props.style.y}} className="ui main container">
+                    <h3 className="ui top attached inverted blue header">
+                      <Link to={`/journal/${this.props.journal.id}`}>
+                        {this.props.journal.title}
+                      </Link>
+                    </h3>
+                    <div className="ui raised attached segment">
                       <span>{this.props.journal.preview}</span>
+                      {/**<h3 className="ui small bottom right aligned header">Test</h3>**/}
                     </div>
+
                   </div>
                 );
   };

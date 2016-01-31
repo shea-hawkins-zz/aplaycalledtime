@@ -14,6 +14,7 @@ import Model from './state/Model';
 import Day from './console/components/Day';
 import Log from './console/components/Log';
 import Journey from './journey/Journey';
+import Journal from './journey/components/Journal';
 
 const history = createBrowserHistory();
 const dayQuery = {
@@ -23,7 +24,10 @@ const logQuery = {
   log: () => Relay.QL`query { log }`
 };
 const journeyQuery = {
-  journey: () => Relay.QL`query { journey(id: "1") }`
+  journey: () => Relay.QL`query { journey}`
+};
+const journalQuery = {
+  journal: () => Relay.QL`query { journal(id: $journalId) }`
 };
 var App = function(props) {
   return (<div className="page">
@@ -56,11 +60,12 @@ Model.subject.subscribe((appState) => {
   render((
     <RelayRouter history={history} createElement={createElement}>
       <Route path="/" component={App}>
-        <IndexRoute component={Journey} />
+        <IndexRoute component={Journey} queries={journeyQuery} />
         <Route path="days/:dayId" component={Day} queries={dayQuery} />
         <Route path="console" component={Log} queries={logQuery} />
-        <Route path="journey" component={Journey}/>
-        <Route path="*" component={Journey}  />
+        <Route path="journey" component={Journey} queries={journeyQuery} />
+        <Route path="journal/:journalId" component={Journal} queries={journalQuery} />
+        <Route path="*" component={Journey}  queries={journeyQuery} />
       </Route>
     </RelayRouter>
   ), document.getElementById('root'));
