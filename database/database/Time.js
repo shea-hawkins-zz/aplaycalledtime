@@ -175,7 +175,7 @@ var rethinkTime = function rethinkTime(connection) {
             .update({weight: weight})
               .run(connection, function(err, result) {
                 if (err) reject(err);
-                resolve(result);
+                resolve({result: result, dayId: dayId});
               });
       });
     },
@@ -193,6 +193,9 @@ var rethinkTime = function rethinkTime(connection) {
     getTypes: function getTypes(objectType, parentType) {
       return new Promise(function(resolve, reject) {
         r.db('unity').table('objectTypes')
+          .filter(function(type) {
+            return type("parentTypes").contains(parentType).and(type("objectType").eq(objectType));
+          })
   					.coerceTo('array')
               .run(connection, function(err, result) {
                 if (err) reject(err);

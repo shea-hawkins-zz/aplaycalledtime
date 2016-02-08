@@ -33,7 +33,7 @@ class StatInput extends Component {
                     })
                   }</select>
                   <input className = "ui input" id="value" onChange={this._handleChange}></input>
-                  <select id="conf" onChange={this._handleChange} className="ui dropdown">
+                  {this.props.statBlock.type !== "Calorie" && (<select id="conf" onChange={this._handleChange} className="ui dropdown">
                     <option value="">Confidence</option>
                     <option value="0">Failure</option>
                     <option value="5">5</option>
@@ -42,7 +42,7 @@ class StatInput extends Component {
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
-                  </select>
+                  </select>)}
                   <button className = "ui button" onClick={this.addStat} >Submit</button></div>);
   }
 }
@@ -51,6 +51,7 @@ export default Relay.createContainer(StatInput, {
   fragments: {
     statBlock: () => Relay.QL`
       fragment on StatBlock {
+        type,
         ${AddStatMutation.getFragment('statBlock')},
         statTypes {
           type

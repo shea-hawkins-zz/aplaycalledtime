@@ -8,7 +8,7 @@ class StatBlock extends Component {
         <thead>
           <tr><th className="single line">Stat</th>
           <th>Value</th>
-          <th>Confidence</th>
+          {this.props.statBlock.type !== "Calorie" && (<th>Confidence</th>)}
         </tr></thead>
         <tbody>
         {this.props.statBlock.stats.edges.map((e) => {
@@ -20,9 +20,9 @@ class StatBlock extends Component {
               <td>
                 <h2 className="center aligned">{e.node.value}</h2>
               </td>
-              <td>
+              {this.props.statBlock.type !== "Calorie" && (<td>
                 <h2 className="ui center aligned header">{e.node.conf}</h2>
-              </td>
+              </td>)}
             </tr>);
         })}</tbody>
     </table></div>);
@@ -35,7 +35,7 @@ class StatBlock extends Component {
      fragment on StatBlock {
        id,
        type,
-       stats(first: 5) {
+       stats(first: 20) {
          edges {
            node {
              id,

@@ -3,6 +3,7 @@ import Relay from 'react-relay';
 import StatBlockInput from './StatBlockInput';
 import WorkoutItem from './WorkoutItem';
 import ComponentBar from './ComponentBar';
+import CalorieItem from './CalorieItem';
 import { Link } from 'react-router';
 import AddStatBlockToDayMutation from '../mutations/AddStatBlockToDayMutation';
 import UpdateWeightMutation from '../mutations/UpdateWeightMutation';
@@ -73,7 +74,14 @@ class Day extends React.Component {
                     {
                       this.props.day.statBlocks.edges.map(
                         (e) => {
-                          return (<WorkoutItem appState={this.props.appState} statBlock={e.node} />);
+                          switch (e.node.type) {
+                            case 'Calorie':
+                              return (<CalorieItem appState={this.props.appState} calorie={e.node}/>);
+                            case 'Note':
+                              //return (<NoteItem appState={this.props.appState} note={e.node}/>);
+                            default:
+                              return   (<WorkoutItem appState={this.props.appState} statBlock={e.node} />);
+                          }
                         }
                     )
                   }
@@ -96,7 +104,9 @@ export default Relay.createContainer(Day, {
         statBlocks(first: 10) {
           edges {
             node {
-              ${WorkoutItem.getFragment('statBlock')}
+              type,
+              ${WorkoutItem.getFragment('statBlock')},
+              ${CalorieItem.getFragment('calorie')}
             }
           }
         }
