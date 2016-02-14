@@ -4,6 +4,7 @@ import StatBlockInput from './StatBlockInput';
 import WorkoutItem from './WorkoutItem';
 import ComponentBar from './ComponentBar';
 import CalorieItem from './CalorieItem';
+import NoteItem from './NoteItem';
 import { Link } from 'react-router';
 import AddStatBlockToDayMutation from '../mutations/AddStatBlockToDayMutation';
 import UpdateWeightMutation from '../mutations/UpdateWeightMutation';
@@ -78,7 +79,7 @@ class Day extends React.Component {
                             case 'Calorie':
                               return (<CalorieItem appState={this.props.appState} calorie={e.node}/>);
                             case 'Note':
-                              return (<NoteItem appState={this.props.appState} note={e.node}/>);
+                              return (<NoteItem appState={this.props.appState} noteBlock={e.node}/>);
                             default:
                               return   (<WorkoutItem appState={this.props.appState} statBlock={e.node} />);
                           }

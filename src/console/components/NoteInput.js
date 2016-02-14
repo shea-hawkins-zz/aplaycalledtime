@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Relay from 'react-relay';
 import AddStatMutation from '../mutations/AddStatMutation';
 
-class StatInput extends Component {
+class NoteInput extends Component {
   newStat = {
                       name: this.props.noteBlock.statTypes[0].type,
                       type: "note"
@@ -48,7 +48,7 @@ export default Relay.createContainer(NoteInput, {
     noteBlock: () => Relay.QL`
       fragment on StatBlock {
         type,
-        ${AddStatMutation.getFragment('noteBlock')},
+        ${AddStatMutation.getFragment('statBlock')},
         statTypes {
           type
         }
