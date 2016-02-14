@@ -5,14 +5,6 @@ class GoalUpdate extends React.Component {
   render() {
     var goal = this.props.goal;
     return (
-      <table className="ui celled padded table">
-        <thead>
-          <tr><th className="single line">{`Goals: ${goal.type}`}</th></tr>
-          <tr>
-            <th className="single line">Exercise</th>
-            <th className="single line">Goal</th>
-          </tr>
-        </thead>
         <tbody>
         {goal.stats.edges.map((e) => {
           return (
@@ -25,8 +17,7 @@ class GoalUpdate extends React.Component {
               </td>
             </tr>);
         })}
-        </tbody>
-    </table>);
+        </tbody>);
   }
 }
 

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Relay from 'react-relay';
 import Intent from '../../state/Intent';
 import StatBlock from './StatBlock';
-import StatInput from './StatInput';
 
 class CalorieItem extends Component {
   render() {
@@ -13,9 +12,9 @@ class CalorieItem extends Component {
                 <div className="ui large teal ribbon label">
                   <i className="line chart icon" /><a>{this.props.calorie.type + '-' + sum}</a>
                 </div>
+                <div className="ui divider" />
                 <div>
                   <StatBlock statBlock={this.props.calorie} />
-                  <StatInput statBlock={this.props.calorie} />
                 </div>
               </div>);
           }
@@ -27,7 +26,6 @@ export default Relay.createContainer(CalorieItem, {
       fragment on StatBlock {
         type,
         ${StatBlock.getFragment('statBlock')},
-        ${StatInput.getFragment('statBlock')},
         stats(first: 20) {
           edges {
             node {

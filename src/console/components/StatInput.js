@@ -27,23 +27,38 @@ class StatInput extends Component {
     }
   }
   render() {
-    return (<div> <select id="name" className="ui dropdown" onChange={this._handleChange}>{
+    return (
+    <tfoot className="full-width">
+      <tr>
+        <th className="center aligned">
+                  <select id="name" className="ui dropdown" onChange={this._handleChange}>{
                     this.props.statBlock.statTypes.map(function(e){
                       return (<option value={e.type}>{e.type}</option>);
                     })
                   }</select>
+        </th>
+        <th className="center aligned">
                   <input className = "ui input" id="value" onChange={this._handleChange}></input>
-                  {this.props.statBlock.type !== "Calorie" && (<select id="conf" onChange={this._handleChange} className="ui dropdown">
-                    <option value="">Confidence</option>
-                    <option value="0">Failure</option>
+        </th>
+          {this.props.statBlock.type !== "Calorie" && (
+                  <th className="center aligned">
+                    <select id="conf" onChange={this._handleChange} className="ui dropdown">
+                    <option value="0">0</option>
                     <option value="5">5</option>
                     <option value="6">6</option>
                     <option value="7">7</option>
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
-                  </select>)}
-                  <button className = "ui button" onClick={this.addStat} >Submit</button></div>);
+                  </select>
+                </th>)}
+      </tr>
+      <tr>
+        <th colSpan={this.props.statBlock.type === "Calorie" ? "2" : "3"}>
+          <button className = "ui right floated button" onClick={this.addStat} >Submit</button>
+        </th>
+      </tr>
+    </tfoot>);
   }
 }
 

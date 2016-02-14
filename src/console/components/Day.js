@@ -78,7 +78,7 @@ class Day extends React.Component {
                             case 'Calorie':
                               return (<CalorieItem appState={this.props.appState} calorie={e.node}/>);
                             case 'Note':
-                              //return (<NoteItem appState={this.props.appState} note={e.node}/>);
+                              return (<NoteItem appState={this.props.appState} note={e.node}/>);
                             default:
                               return   (<WorkoutItem appState={this.props.appState} statBlock={e.node} />);
                           }
@@ -106,7 +106,8 @@ export default Relay.createContainer(Day, {
             node {
               type,
               ${WorkoutItem.getFragment('statBlock')},
-              ${CalorieItem.getFragment('calorie')}
+              ${CalorieItem.getFragment('calorie')},
+              ${NoteItem.getFragment('noteBlock')}
             }
           }
         }

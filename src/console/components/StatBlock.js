@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Relay from 'react-relay';
+import StatInput from './StatInput';
 
 class StatBlock extends Component {
   render() {
@@ -21,10 +22,11 @@ class StatBlock extends Component {
                 <h2 className="center aligned">{e.node.value}</h2>
               </td>
               {this.props.statBlock.type !== "Calorie" && (<td>
-                <h2 className="ui center aligned header">{e.node.conf}</h2>
+                <h2 className="center aligned">{e.node.conf}</h2>
               </td>)}
             </tr>);
         })}</tbody>
+        <StatInput statBlock={this.props.statBlock} />
     </table></div>);
   }
  }
@@ -35,6 +37,7 @@ class StatBlock extends Component {
      fragment on StatBlock {
        id,
        type,
+       ${StatInput.getFragment('statBlock')},
        stats(first: 20) {
          edges {
            node {

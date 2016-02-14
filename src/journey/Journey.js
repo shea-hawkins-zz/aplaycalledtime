@@ -14,11 +14,8 @@ class Journey extends React.Component {
   render() {
     var componentBar = [];
     var journals = this.props.journey.journals;
-    return (<div className="ui stackable grid">
-                <div className="ui four wide column">
-                  {/**<ComponentBar components={componentBar} />**/}
-                </div>
-                <div className="ui ten wide column">
+    return (<div className="ui centered stackable grid">
+                <div className="ui centered twelve wide column">
                   <StaggeredMotion defaultStyles={this.getDefaultStyles()} styles={prevStyles => prevStyles.map((prevStyle, i)=> {
                     return i === 0 ? {x: spring(300, [96, 43]), y: spring(1, [66, 43])} : {x: spring(prevStyles[i - 1].x, [96, 43]), y: spring(prevStyles[i - 1].y, [96, 43])};
                   })}>

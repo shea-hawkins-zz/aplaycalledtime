@@ -271,8 +271,10 @@ var addDayMutation = mutationWithClientMutationId({
       if (lastDate.getTime() >= todayFloored.getTime()) {
         throw 'not updatable!';
       }
-    }).then(function () {
-      return Time.createDay({date: dateString, statBlocks: []});
+    }).then(function() {
+      return Time.createStatBlock({type: "Note", stats: []});
+    }).then(function (result) {
+      return Time.createDay({date: dateString, statBlocks: [result.statBlockId]});
     }).then(function (result) {
       return Time.addDayToLog(result.dayId, dateString, logId);
     }).catch(function (err) {
@@ -343,7 +345,7 @@ var addStatMutation = mutationWithClientMutationId({
     stat: { type: new GraphQLNonNull(new GraphQLInputObjectType({
         name: 'StatInput',
         fields: {
-          name: { type: new GraphQLNonNull(GraphQLString) },
+          name: { type: GraphQLString },
           type: { type: new GraphQLNonNull(GraphQLString) },
           value: { type: new GraphQLNonNull(GraphQLString) },
           conf: { type: GraphQLInt }

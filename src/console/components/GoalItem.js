@@ -6,9 +6,9 @@ import Intent from '../../state/Intent';
 
 var GoalToggle = (props) => {
   if (props.goalUpdate) {
-    return (<button onClick={props.handleGoalUpdateSubmit}><i className="save icon"></i></button>);
+    return (<button onClick={props.handleGoalUpdateSubmit}><i className="ui right floated save icon"></i></button>);
   } else {
-    return (<button onClick={props.handleGoalUpdateToggle}><i className="edit icon"></i></button>);
+    return (<button onClick={props.handleGoalUpdateToggle}><i className="ui right floated edit icon"></i></button>);
   }
 }
 
@@ -53,9 +53,21 @@ class GoalItem extends React.Component {
       <div>
         {goal ?
             <div>
+            <table className="ui celled padded table">
+              <thead>
+                <tr>
+                  <th colSpan="2" className="single line"><div style={{float: "left"}}>{`Goals: ${goal.type}`}</div>
+                  <div style={{float: "right"}}><GoalToggle goalUpdate={this.props.appState.goalUpdate} handleGoalUpdateSubmit={this.handleGoalUpdateSubmit.bind(this)}
+                  handleGoalUpdateToggle={this.handleGoalUpdateToggle.bind(this)}/></div></th>
+                </tr>
+                <tr>
+                  <th className="single line">Exercise</th>
+                  <th className="single line">Goal</th>
+                </tr>
+              </thead>
               <Goal goal={this.props.goal} goalUpdate={this.props.appState.goalUpdate} handleGoalUpdateChange={this.handleGoalUpdateChange.bind(this)}/>
-              <GoalToggle goalUpdate={this.props.appState.goalUpdate} handleGoalUpdateSubmit={this.handleGoalUpdateSubmit.bind(this)}
-              handleGoalUpdateToggle={this.handleGoalUpdateToggle.bind(this)}/>
+
+            </table>
             </div>
             :
             <h2 className="ui header">New Goal, please.</h2>

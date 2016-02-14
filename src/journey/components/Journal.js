@@ -5,14 +5,18 @@ class Journal extends React.Component {
   render() {
     var componentBar = [];
     return (
-                  <div className="ui main container">
-                    <h3 className="ui top attached inverted blue header">
-                      {this.props.journal.title}
-                    </h3>
-                    <div dangerouslySetInnerHTML={{__html: this.props.journal.html.content}} className="ui raised attached segment">
-                      {/**<h3 className="ui small bottom right aligned header">Test</h3>**/}
+                <div className="ui centered grid">
+                  <div className="ui twelve wide centered column">
+                    <div className="ui main container">
+                      <h3 className="ui top attached inverted blue header">
+                        {this.props.journal.title}
+                      </h3>
+                      <div dangerouslySetInnerHTML={{__html: this.props.journal.html.content}} className="ui raised attached segment">
+                        {/**<h3 className="ui small bottom right aligned header">Test</h3>**/}
+                      </div>
                     </div>
                   </div>
+                </div>
                 );
   };
 }
