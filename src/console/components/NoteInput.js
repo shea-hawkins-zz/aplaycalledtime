@@ -4,7 +4,7 @@ import AddStatMutation from '../mutations/AddStatMutation';
 
 class NoteInput extends Component {
   newStat = {
-                      name: this.props.noteBlock.statTypes[0].type,
+                      name: "note",
                       type: "note"
                     };
   addStat = () => {
@@ -31,12 +31,10 @@ class NoteInput extends Component {
     <tfoot className="full-width">
       <tr>
         <th className="center aligned">
-                  <input className = "ui input" id="value" onChange={this._handleChange}></input>
-        </th>
-      </tr>
-      <tr>
-        <th>
-          <button className = "ui right floated button" onClick={this.addStat}>Submit</button>
+          <div className="ui fluid action input">
+                  <input id="value" onChange={this._handleChange}></input>
+                  <button className = "ui right floated button" onClick={this.addStat}>Submit</button>
+          </div>
         </th>
       </tr>
     </tfoot>);
