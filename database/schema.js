@@ -79,6 +79,10 @@ var journalType = new GraphQLObjectType({
     html: {
             type: contentType,
             resolve: (journal) => Time.getContent(journal.html)
+          },
+    goldhtml: {
+            type: contentType,
+            resolve: (journal) => journal.goldhtml ? Time.getContent(journal.goldhtml) : null
           }
   }),
   interfaces: [nodeInterface]

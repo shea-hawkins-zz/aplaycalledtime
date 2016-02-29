@@ -22,7 +22,7 @@ class Journey extends React.Component {
                     {interpolatedStyles =>
                       <div>
                         {interpolatedStyles.map((style, i) =>
-                          <JournalItem key={i} style={style} journal={journals.edges[i].node} />
+                          <JournalItem key={i} style={style} journal={journals.edges[i].node} appState={this.props.appState} />
                         )}
                       </div>
                     }

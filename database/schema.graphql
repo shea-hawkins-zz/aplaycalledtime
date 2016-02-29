@@ -63,6 +63,7 @@ type Journal implements Node {
   preview: String
   markdown: Content
   html: Content
+  goldhtml: Content
 }
 
 type JournalConnection {
@@ -163,7 +164,7 @@ type StatEdge {
 }
 
 input StatInput {
-  name: String!
+  name: String
   type: String!
   value: String!
   conf: Int

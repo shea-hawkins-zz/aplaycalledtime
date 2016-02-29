@@ -17,7 +17,7 @@ export default class JournalItem extends React.Component {
                       <span>{this.props.journal.preview}</span>
                       {/**<h3 className="ui small bottom right aligned header">Test</h3>**/}
                     </div>
-
+                    <div className="ui divider" />
                   </div>
                 );
   };

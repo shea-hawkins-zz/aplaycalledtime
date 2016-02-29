@@ -6,7 +6,8 @@ var subject = new Rx.ReplaySubject(1);
 
 var state = {
   showNew: false,
-  goalUpdate: false
+  goalUpdate: false,
+  goldShow: false
 };
 
 Intent.subjects.toggleNewSubject.subscribe(() => {
@@ -31,6 +32,15 @@ Intent.subjects.toggleGoalShowSubject.subscribe(() => {
   state = update(state, {
     $merge: {
       goalShow: state.goalShow ? false: true
+    }
+  });
+  subject.next(state);
+});
+
+Intent.subjects.toggleGoldShowSubject.subscribe(() => {
+  state = update(state, {
+    $merge: {
+      goldShow: state.goldShow ? false: true
     }
   });
   subject.next(state);

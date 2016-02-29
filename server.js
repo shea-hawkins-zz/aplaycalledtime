@@ -51,6 +51,12 @@ app.use(
 );
 
 app.use(
+  route.get('/episode-one*', function * () {
+    yield send (this, 'episode-one.html');
+  })
+);
+
+app.use(
   route.get('*', function * () {
     yield send(this, 'index.html');
   })
