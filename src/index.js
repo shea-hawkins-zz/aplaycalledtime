@@ -31,7 +31,7 @@ const journalQuery = {
   journal: () => Relay.QL`query { journal(id: $journalId) }`
 };
 var App = function(props) {
-  return (<div className="page">
+  return (<div>
             <div className="header">
               <h1 className="ui inverted header"><i>A Play Called Time</i></h1>
               <div className="ui inverted top menu">

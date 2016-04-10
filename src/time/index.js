@@ -1,11 +1,4 @@
 import React from 'react';
-import { render } from 'react-dom';
-import TextEnt from './Scene/TextEnt';
-import AFRAME from 'aframe';
-import './components/phong';
-import './components/text';
-import './components/collada-material';
-import {Scene, Entity} from 'aframe-react';
 import Cassette from 'react-cassette-player';
 
 export default React.createClass({
