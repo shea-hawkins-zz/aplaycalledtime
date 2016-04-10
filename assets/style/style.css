@@ -1,0 +1,247 @@
+a {
+  color:#61dafb;
+  font-weight: bold;
+}
+a:hover {
+  text-decoration: none;
+  color:#CC7A6F;
+}
+body {
+  background-color: #2d2d2d;
+  margin:0px;
+  padding:0px;
+  color:#EBEFF0;
+  font-family: 'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif;
+}
+hr {
+  width:40%;
+  border-color: #999;
+  margin-top:65px;
+  margin-bottom:65px;
+}
+h1 {
+  width:60%;
+  text-align: center;
+  margin:0px auto;
+  padding-bottom:55px;
+  padding-top: 55px;
+}
+.demo {
+  width:100% !important;
+  height:90% !important;
+}
+.song, .artist {
+  position: relative;
+  font-size:2em;
+  padding-left: 10%;
+}
+.song {
+  bottom: 110px;
+  font-weight: bold;
+}
+.artist {
+  bottom: 105px;
+}
+.rush-wrap {
+  background-color: #999;
+}
+.mm-wrap {
+  background-color: #ADBA8C;
+}
+.mm .song, .mm .artist {
+  color: #7A8867;
+}
+.info {
+  padding-top:10%;
+  padding-bottom: 10%;
+  background-color: #000;
+  width:100%;
+  margin:0px auto;
+  text-align: center;
+  font-size: 1.2em;
+}
+.info p, .info img {
+  margin-bottom:33px;
+}
+.head p {
+  margin-bottom:19px !important;
+}
+.head img {
+  margin-top: 45px !important;
+  margin-bottom:40px !important;
+}
+.nwa-wrap {
+  background-color: #EBEFF0;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  width:500px;
+  height:333px;
+  margin:0px auto;
+}
+.track_info {
+  width:500px;
+  margin:6% auto;
+  text-align: center;
+  font-family: 'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif;
+  font-size:2.6em;
+  color:#EBEFF0;
+}
+.nwa {
+  padding-top:15%;
+  background-color: #111;
+}
+.mds-wrap {
+  background-color: #AE1A1A;
+}
+.quasi-wrap {
+  background-color: #3e3526;
+}
+.qsi .song, .qsi .artist {
+  color: #e4faed;
+}
+.shivas-wrap {
+  background-color: #BFEDEF;
+}
+.shv .song, .shv .artist {
+  color: #545C52;
+}
+.rush-wrap, .mm-wrap, .nwa-wrap, .mds-wrap, .shivas-wrap, .quasi-wrap {
+  cursor:pointer;
+}
+@media (max-width: 600px) {
+  .track_info {
+    width: 330px;
+    font-size: 1.6em;
+  }
+  .nwa-wrap {
+    width: 330px;
+  }
+  .song, .artist {
+    font-size: 1.4em;
+    padding-left: 5%;
+  }
+}a {
+  color:#61dafb;
+  font-weight: bold;
+}
+a:hover {
+  text-decoration: none;
+  color:#CC7A6F;
+}
+body {
+  background-color: #2d2d2d;
+  margin:0px;
+  padding:0px;
+  color:#EBEFF0;
+  font-family: 'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif;
+}
+hr {
+  width:40%;
+  border-color: #999;
+  margin-top:65px;
+  margin-bottom:65px;
+}
+h1 {
+  width:60%;
+  text-align: center;
+  margin:0px auto;
+  padding-bottom:55px;
+  padding-top: 55px;
+}
+.demo {
+  width:100% !important;
+  height:90% !important;
+}
+.song, .artist {
+  position: relative;
+  font-size:2em;
+  padding-left: 10%;
+}
+.song {
+  bottom: 110px;
+  font-weight: bold;
+}
+.artist {
+  bottom: 105px;
+}
+.rush-wrap {
+  background-color: #999;
+}
+.mm-wrap {
+  background-color: #ADBA8C;
+}
+.mm .song, .mm .artist {
+  color: #7A8867;
+}
+.info {
+  padding-top:10%;
+  padding-bottom: 10%;
+  background-color: #000;
+  width:100%;
+  margin:0px auto;
+  text-align: center;
+  font-size: 1.2em;
+}
+.info p, .info img {
+  margin-bottom:33px;
+}
+.head p {
+  margin-bottom:19px !important;
+}
+.head img {
+  margin-top: 45px !important;
+  margin-bottom:40px !important;
+}
+.nwa-wrap {
+  background-color: #EBEFF0;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  width:900px;
+  height:333px;
+  margin:0px auto;
+}
+.track_info {
+  width:500px;
+  margin:6% auto;
+  text-align: center;
+  font-family: 'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif;
+  font-size:2.6em;
+  color:#EBEFF0;
+}
+.nwa {
+  padding-top:15%;
+  background-color: #111;
+}
+.mds-wrap {
+  background-color: #AE1A1A;
+}
+.quasi-wrap {
+  background-color: #3e3526;
+}
+.qsi .song, .qsi .artist {
+  color: #e4faed;
+}
+.shivas-wrap {
+  background-color: #BFEDEF;
+}
+.shv .song, .shv .artist {
+  color: #545C52;
+}
+.rush-wrap, .mm-wrap, .nwa-wrap, .mds-wrap, .shivas-wrap, .quasi-wrap {
+  cursor:pointer;
+}
+@media (max-width: 600px) {
+  .track_info {
+    width: 330px;
+    font-size: 1.6em;
+  }
+  .nwa-wrap {
+    width: 330px;
+  }
+  .song, .artist {
+    font-size: 1.4em;
+    padding-left: 5%;
+  }
+}

@@ -64,6 +64,10 @@ module.exports = {
     },{
       test: /\.json$/,
       loader: 'json-loader'
+    },{
+      test: /\.(glsl|frag|vert)$/,
+      loaders: ['raw', 'glslify'],
+      include: [path.join(__dirname, 'src')]
     }
   ]
   }

@@ -11,6 +11,7 @@ import update from 'react-addons-update';
 import Model from './state/Model';
 
 //Application
+import EpisodeOne from './time/index';
 import Day from './console/components/Day';
 import Log from './console/components/Log';
 import Journey from './journey/Journey';
@@ -32,9 +33,9 @@ const journalQuery = {
 var App = function(props) {
   return (<div className="page">
             <div className="header">
-              <h1 className="ui inverted header">A Play Called Time.</h1>
+              <h1 className="ui inverted header"><i>A Play Called Time</i></h1>
               <div className="ui inverted top menu">
-                <Link to={`/journey/`} className="disabled teal item">Time</Link>
+                <Link to={`/time/`} className="teal item" activeClassName="active teal item">Time</Link>
                 <Link to={`/journey/`} className="teal item" activeClassName="active teal item">Journey</Link>
                 <Link to={`/console/`} className="teal item" activeClassName="active teal item">console.log()</Link>
               </div>
@@ -60,8 +61,9 @@ Model.subject.subscribe((appState) => {
   render((
     <RelayRouter history={history} createElement={createElement}>
       <Route path="/" component={App}>
-        <IndexRoute component={Journey} queries={journeyQuery} />
+        <IndexRoute component={EpisodeOne} />
         <Route path="days/:dayId" component={Day} queries={dayQuery} />
+        <Route path="time" component={EpisodeOne} />
         <Route path="console" component={Log} queries={logQuery} />
         <Route path="journey" component={Journey} queries={journeyQuery} />
         <Route path="journal/:journalId" component={Journal} queries={journalQuery} />

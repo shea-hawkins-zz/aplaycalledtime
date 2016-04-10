@@ -51,14 +51,14 @@ app.use(
 );
 
 app.use(
-  route.get('/episode-one*', function * () {
-    yield send (this, 'episode-one.html');
+  route.get('*', function * () {
+    yield send(this, 'index.html');
   })
 );
 
 app.use(
-  route.get('*', function * () {
-    yield send(this, 'index.html');
+  route.get('/assets*', function * () {
+    yield send(this, this.path, {root: __dirname });
   })
 );
 

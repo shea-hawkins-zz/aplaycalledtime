@@ -38,6 +38,12 @@ app.use(
 );
 
 app.use(
+  route.get('/assets*', function * () {
+    yield send(this, this.path, {root: __dirname });
+  })
+);
+
+app.use(
   route.get('/episode-one*', function * () {
     yield send (this, 'episode-one.html');
   })

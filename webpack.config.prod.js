@@ -42,6 +42,10 @@ module.exports = {
       loader: 'babel',
       include: [path.join(__dirname, 'src'), path.join(__dirname, 'data')],
       query: babelConfig
+    },{
+      test: /\.(glsl|frag|vert)$/,
+      loaders: ['raw', 'glslify'],
+      include: [path.join(__dirname, 'src')]
     }]
   }
 };
