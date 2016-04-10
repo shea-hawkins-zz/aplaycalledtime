@@ -51,16 +51,24 @@ app.use(
 );
 
 app.use(
+  route.get('/assets*', function * () {
+    yield send(this, this.path, {root: __dirname });
+  })
+);
+
+app.use(
+  route.get('/episode-one*', function * () {
+    yield send (this, 'episode-one.html');
+  })
+);
+
+app.use(
   route.get('*', function * () {
     yield send(this, 'index.html');
   })
 );
 
-app.use(
-  route.get('/assets*', function * () {
-    yield send(this, this.path, {root: __dirname });
-  })
-);
+
 
 app.listen(port);
 console.log("listening on " + port);
